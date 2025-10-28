@@ -43,7 +43,7 @@ jobs:
 
       - name: 📜️ Copy changelog file
         run: |
-          cp docs/CHANGELOG.md dist/package/CHANGELOG.md
+          cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
 
       - name: 📦 Archive Antares Desktop for Windows
         if: matrix.os == 'windows-latest'
