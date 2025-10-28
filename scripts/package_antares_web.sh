@@ -46,6 +46,8 @@ declare -A YAML_VERSION_MAP=(
   ["9.3.1"]="930"
 )
 
+SOLVER_MAPPING_IN_CONFIG_FILE = ""
+
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
   FOLDER_NAME="${VERSION_MAP[$KEY]}"
@@ -63,13 +65,16 @@ for KEY in "${!VERSION_MAP[@]}"; do
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
-    sed -i "s/VER: ANTARES_SOLVER_PATH/$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe/g" "${DIST_DIR}/config.yaml"
+    SOLVER_MAPPING_IN_CONFIG_FILE+="$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe\n"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
-    sed -i "s/VER: ANTARES_SOLVER_PATH/$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver/g" "${DIST_DIR}/config.yaml"
+    SOLVER_MAPPING_IN_CONFIG_FILE+="$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver\n"
   fi
   rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
 done
+
+echo "Writing solver mapping inside the application config file"
+sed -i "s/VER: ANTARES_SOLVER_PATH/c$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
 
 echo "INFO: Antares Web Packaging DONE."
