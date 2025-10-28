@@ -21,14 +21,6 @@ else
   ANTARES_SOLVER_ZIPFILE_NAME="antares-solver_ubuntu22.04.tar.gz"
 fi
 
-ANTARES_SOLVER_FULL_VERSION_88="8.8.17"
-ANTARES_SOLVER_FULL_VERSION_92="9.2.2"
-ANTARES_SOLVER_FULL_VERSION_92="9.3.1"
-
-LINK_88="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_88/$ANTARES_SOLVER_ZIPFILE_NAME"
-LINK_92="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_92/$ANTARES_SOLVER_ZIPFILE_NAME"
-LINK_93="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_92/$ANTARES_SOLVER_ZIPFILE_NAME"
-
 echo "INFO: Preparing the Git Commit ID..."
 git log -1 HEAD --format=%H > ${RESOURCES_DIR}/commit_id
 
@@ -39,37 +31,19 @@ rm -rf ${DIST_DIR}
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
 
-echo "INFO: Downloading '$ANTARES_SOLVER_FULL_VERSION_88' in '$ANTARES_SOLVER_DIR'..."
-cd "$ANTARES_SOLVER_DIR" || exit
-wget $LINK_88
+declare -A VERSION_MAP=(
+    ["8.8.17"]="8_8"
+    ["9.2.2"]="9_2"
+    ["9.3.1"]="9_3"
+)
 
-echo "INFO: Downloading '$ANTARES_SOLVER_FULL_VERSION_92' in '$ANTARES_SOLVER_DIR'..."
-cd "$ANTARES_SOLVER_DIR" || exit
-wget $LINK_92
-
-echo "INFO: Downloading '$ANTARES_SOLVER_FULL_VERSION_93' in '$ANTARES_SOLVER_DIR'..."
-cd "$ANTARES_SOLVER_DIR" || exit
-wget $LINK_93
-
-echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
-if [[ "$OSTYPE" == "msys"* ]]; then
-  7z x $ANTARES_SOLVER_ZIPFILE_NAME
-else
-  tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
-fi
-rm $ANTARES_SOLVER_ZIPFILE_NAME
-
-if [[ "$OSTYPE" == "msys"* ]]; then
-  echo "INFO: Moving executables in '$ANTARES_SOLVER_DIR'..."
-  mv "$ANTARES_SOLVER_DIR/solver/Release/"* "$ANTARES_SOLVER_DIR"
-  rm -rf $ANTARES_SOLVER_FOLDER_NAME
-  rm -rf $"$ANTARES_SOLVER_DIR/solver/Release/"
-fi
-
-
-ANTARES_SOLVER_VERSION="8.8"
-ANTARES_SOLVER_VERSION_INT="880"
-
+for KEY in "${!VERSION_MAP[@]}"; do
+  LINK = "https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
+  FOLDER_NAME="${VERSION_MAP[$KEY]}"
+  cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
+  wget "$LINK"
+  cd ..
+done
 
 echo "INFO: Copying basic configuration files..."
 rm -rf "${DIST_DIR}/examples" # in case of replay
