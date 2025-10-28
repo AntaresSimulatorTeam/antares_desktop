@@ -21,10 +21,9 @@ jobs:
       - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          echo "GIT LOG: $(git log -3)"
           git checkout dev
           git pull
-          echo "GIT LOG: $(git log -3)"
+          echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
 
       - name: 🔗 Install wget for Windows
