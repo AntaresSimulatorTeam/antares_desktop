@@ -22,10 +22,12 @@ else
 fi
 
 ANTARES_SOLVER_FULL_VERSION_88="8.8.17"
-ANTARES_SOLVER_FULL_VERSION_92="9.2.1"
+ANTARES_SOLVER_FULL_VERSION_92="9.2.2"
+ANTARES_SOLVER_FULL_VERSION_92="9.3.1"
 
 LINK_88="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_88/$ANTARES_SOLVER_ZIPFILE_NAME"
 LINK_92="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_92/$ANTARES_SOLVER_ZIPFILE_NAME"
+LINK_93="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION_92/$ANTARES_SOLVER_ZIPFILE_NAME"
 
 echo "INFO: Preparing the Git Commit ID..."
 git log -1 HEAD --format=%H > ${RESOURCES_DIR}/commit_id
@@ -44,6 +46,10 @@ wget $LINK_88
 echo "INFO: Downloading '$ANTARES_SOLVER_FULL_VERSION_92' in '$ANTARES_SOLVER_DIR'..."
 cd "$ANTARES_SOLVER_DIR" || exit
 wget $LINK_92
+
+echo "INFO: Downloading '$ANTARES_SOLVER_FULL_VERSION_93' in '$ANTARES_SOLVER_DIR'..."
+cd "$ANTARES_SOLVER_DIR" || exit
+wget $LINK_93
 
 echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
 if [[ "$OSTYPE" == "msys"* ]]; then
