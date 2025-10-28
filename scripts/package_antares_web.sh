@@ -57,7 +57,7 @@ declare -A YAML_VERSION_MAP=(
   ["9.3.1"]="930"
 )
 
-SOLVER_MAPPING_IN_CONFIG_FILE="\n"
+SOLVER_MAPPING_IN_CONFIG_FILE="\\n"
 
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
