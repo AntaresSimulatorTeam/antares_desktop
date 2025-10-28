@@ -43,6 +43,13 @@ for KEY in "${!VERSION_MAP[@]}"; do
   mkdir -p "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}"
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
   wget "$LINK"
+  echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
+  if [[ "$OSTYPE" == "msys"* ]]; then
+    7z x $ANTARES_SOLVER_ZIPFILE_NAME
+  else
+    tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
+  fi
+  rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
 done
 
