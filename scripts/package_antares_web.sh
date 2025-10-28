@@ -76,11 +76,12 @@ for KEY in "${!VERSION_MAP[@]}"; do
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
-    SOLVER_MAPPING_IN_CONFIG_FILE+="$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe\n"
+    SOLVER_NAME="antares$SOLVER_PATH-solver.exe"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
-    SOLVER_MAPPING_IN_CONFIG_FILE+="$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver\n"
+    SOLVER_NAME="antares$SOLVER_PATH-solver"
   fi
+  SOLVER_MAPPING_IN_CONFIG_FILE+="\t\t\t\t$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/$SOLVER_NAME\n"
   rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
 done
