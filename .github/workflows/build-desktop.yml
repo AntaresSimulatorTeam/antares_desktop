@@ -12,6 +12,12 @@ jobs:
         os: [ubuntu-22.04]
 
     steps:
+      - name: 🐙 Checkout GitHub repo (go back on antares_desktop)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
       - name: Checkout AntaREST
         uses: actions/checkout@v4
         with:
@@ -36,9 +42,6 @@ jobs:
       - name: 🐍 Install Windows dependencies
         if: matrix.os == 'windows-latest'
         run: pip install -r requirements-windows.txt
-
-      - name: 🐙 Checkout GitHub repo (go back on antares_desktop)
-        uses: actions/checkout@v4
 
       - name: 📦 Packaging
         run: bash ./package_antares_web.sh
