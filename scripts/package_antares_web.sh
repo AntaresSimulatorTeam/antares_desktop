@@ -38,7 +38,7 @@ declare -A VERSION_MAP=(
 )
 
 for KEY in "${!VERSION_MAP[@]}"; do
-  LINK = "https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
+  LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
   FOLDER_NAME="${VERSION_MAP[$KEY]}"
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
   wget "$LINK"
