@@ -23,7 +23,7 @@ jobs:
           cd antares_web
           git checkout dev
           git pull
-          echo "GIT LOG: $(git remote -v)"
+          echo "GIT LOG: $(git log -3)"
           cd ..
 
       - name: 🔗 Install wget for Windows
