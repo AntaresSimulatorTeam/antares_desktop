@@ -88,15 +88,4 @@ else
   chmod +x "${DIST_DIR}/AntaresWeb/AntaresWebServer"
 fi
 
-echo "INFO: Unzipping example study..."
-# Basic study is located in the `deploy` directory
-cp -r "${RESOURCES_DIR}/deploy/examples/studies/"* "${DIST_DIR}/studies"
-cd "${DIST_DIR}/studies" || exit
-if [[ "$OSTYPE" == "msys"* ]]; then
-  7z x example_study.zip
-else
-  unzip -q example_study.zip
-fi
-rm example_study.zip
-
 echo "INFO: Antares Web Packaging DONE."
