@@ -9,5 +9,4 @@ cd "$CURR_DIR"/../antares_web/webapp
 npm run build -- --mode=desktop
 
 cd ..
-rm -fr resources/webapp
-cp -r ./antares_web/webapp/dist/ resources/webapp
+cp -r antares_web/webapp/dist/ resources/webapp
