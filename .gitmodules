@@ -1,0 +1,3 @@
+[submodule "antares_web"]
+	path = antares_web
+	url = https://github.com/AntaresSimulatorTeam/AntaREST.git
