@@ -28,6 +28,10 @@ echo "INFO: Remove the previous build if any..."
 # Avoid the accumulation of files from previous builds (in development).
 rm -rf ${DIST_DIR}
 
+echo "INFO: Copying basic configuration files..."
+rm -rf "${DIST_DIR}/examples" # in case of replay
+cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
+
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
 
@@ -40,12 +44,20 @@ declare -A VERSION_MAP=(
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
   FOLDER_NAME="${VERSION_MAP[$KEY]}"
+
+  if [[ "$FOLDER_NAME" == "8_8" ]]; then
+    SOLVER_PATH="-8.8"
+  else
+    SOLVER_PATH=""
+  fi
+
   mkdir -p "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}"
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
   wget "$LINK"
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
+    sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe/g" "${DIST_DIR}/config.yaml"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
   fi
@@ -53,9 +65,6 @@ for KEY in "${!VERSION_MAP[@]}"; do
   cd ..
 done
 
-echo "INFO: Copying basic configuration files..."
-rm -rf "${DIST_DIR}/examples" # in case of replay
-cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
 if [[ "$OSTYPE" == "msys"* ]]; then
   sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver.exe/g" "${DIST_DIR}/config.yaml"
 else
