@@ -29,7 +29,6 @@ echo "INFO: Remove the previous build if any..."
 rm -rf ${DIST_DIR}
 
 echo "INFO: Copying basic configuration files..."
-rm -rf "${DIST_DIR}/examples" # in case of replay
 cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
 
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
@@ -60,15 +59,10 @@ for KEY in "${!VERSION_MAP[@]}"; do
     sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe/g" "${DIST_DIR}/config.yaml"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
+    sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver/g" "${DIST_DIR}/config.yaml"
   fi
   rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
 done
-
-if [[ "$OSTYPE" == "msys"* ]]; then
-  sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver.exe/g" "${DIST_DIR}/config.yaml"
-else
-  sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver/g" "${DIST_DIR}/config.yaml"
-fi
 
 echo "INFO: Antares Web Packaging DONE."
