@@ -21,7 +21,7 @@ jobs:
       - name: Update submodule to latest branch
         run: |
           cd antares_web
-          git pull
+          git pull origin
           cd ..
 
       - name: 🔗 Install wget for Windows
