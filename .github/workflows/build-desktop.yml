@@ -21,6 +21,7 @@ jobs:
       - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
+          echo "GIT LOG: $(git log -3)"
           git checkout dev
           git pull
           echo "GIT LOG: $(git log -3)"
