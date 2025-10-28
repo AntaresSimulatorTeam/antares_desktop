@@ -75,6 +75,6 @@ for KEY in "${!VERSION_MAP[@]}"; do
 done
 
 echo "Writing solver mapping inside the application config file"
-sed -i "s/VER: ANTARES_SOLVER_PATH/c$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
+sed -i "/VER: ANTARES_SOLVER_PATH/c$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
 
 echo "INFO: Antares Web Packaging DONE."
