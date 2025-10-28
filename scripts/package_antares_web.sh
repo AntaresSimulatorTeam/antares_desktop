@@ -58,6 +58,7 @@ declare -A YAML_VERSION_MAP=(
 )
 
 SOLVER_MAPPING_IN_CONFIG_FILE=""
+TAB=$'\t'
 
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
@@ -81,7 +82,7 @@ for KEY in "${!VERSION_MAP[@]}"; do
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
     SOLVER_NAME="antares$SOLVER_PATH-solver"
   fi
-  SOLVER_MAPPING_IN_CONFIG_FILE+="\t\t\t\t$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/$SOLVER_NAME\n"
+  SOLVER_MAPPING_IN_CONFIG_FILE+="${TAB}${TAB}${TAB}${TAB}$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/$SOLVER_NAME\n"
   rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
 done
