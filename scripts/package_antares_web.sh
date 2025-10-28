@@ -28,11 +28,11 @@ echo "INFO: Remove the previous build if any..."
 # Avoid the accumulation of files from previous builds (in development).
 rm -rf ${DIST_DIR}
 
-echo "INFO: Copying basic configuration files..."
-cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
-
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
+
+echo "INFO: Copying basic configuration files..."
+cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
 
 declare -A VERSION_MAP=(
     ["8.8.17"]="8_8"
