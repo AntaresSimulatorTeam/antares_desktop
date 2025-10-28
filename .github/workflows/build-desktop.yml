@@ -18,10 +18,11 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: Update submodule to latest branch
+      - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          git pull origin/dev
+          git checkout dev
+          git pull
           cd ..
 
       - name: 🔗 Install wget for Windows
