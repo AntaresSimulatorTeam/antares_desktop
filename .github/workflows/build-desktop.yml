@@ -9,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [ubuntu-22.04, windows-latest]
+        os: [ubuntu-22.04]
 
     steps:
       - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
@@ -29,21 +29,6 @@ jobs:
       - name: 🔗 Install wget for Windows
         if: matrix.os == 'windows-latest'
         run: choco install wget --no-progress
-
-      - name: 💚 Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.13.0
-
-      - name: 💚 Install dependencies
-        run: npm install
-        working-directory: antares_web/webapp
-
-      - name: 💚 Build webapp
-        run: bash ./build-front.sh
-        working-directory: scripts
-        env:
-          NODE_OPTIONS: --max-old-space-size=8192
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v5
