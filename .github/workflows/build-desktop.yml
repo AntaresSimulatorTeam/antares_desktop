@@ -18,6 +18,14 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      - name: Checkout AntaREST on the right branch
+        run: |
+          BRANCH=remove-desktop-relative-things
+          cd antares_web
+          git fetch origin $BRANCH || true
+          git checkout $BRANCH || echo "⚠️ La branche '$BRANCH' n'existe pas dans le submodule"
+          git pull origin $BRANCH || true
+
       - name: 🔗 Install wget for Windows
         if: matrix.os == 'windows-latest'
         run: choco install wget --no-progress
