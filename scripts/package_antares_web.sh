@@ -28,6 +28,17 @@ echo "INFO: Remove the previous build if any..."
 # Avoid the accumulation of files from previous builds (in development).
 rm -rf ${DIST_DIR}
 
+echo "INFO: Generating the Desktop version of the Web Application..."
+if [[ "$OSTYPE" == "msys"* ]]; then
+  pushd ${PROJECT_DIR}
+  pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
+  popd
+else
+  pushd ${PROJECT_DIR}
+  pyinstaller --distpath ${DIST_DIR} AntaresWebLinux.spec
+  popd
+fi
+
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
 
@@ -76,5 +87,13 @@ done
 
 echo "Writing solver mapping inside the application config file"
 sed -i "/VER: ANTARES_SOLVER_PATH/c$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
+
+echo "INFO: Creating shortcuts..."
+if [[ "$OSTYPE" == "msys"* ]]; then
+  cp "${RESOURCES_DIR}/AntaresWebServerShortcut.lnk" "${DIST_DIR}"
+else
+  echo "INFO: Updating executable permissions..."
+  chmod +x "${DIST_DIR}/AntaresWeb/AntaresWebServer"
+fi
 
 echo "INFO: Antares Web Packaging DONE."
