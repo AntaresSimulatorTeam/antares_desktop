@@ -40,9 +40,16 @@ declare -A VERSION_MAP=(
     ["9.3.1"]="9_3"
 )
 
+declare -A YAML_VERSION_MAP=(
+  ["8.8.17"]="880"
+  ["9.2.2"]="920"
+  ["9.3.1"]="930"
+)
+
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
   FOLDER_NAME="${VERSION_MAP[$KEY]}"
+  YAML_SOLVER_NAME="${YAML_VERSION_MAP[$KEY]}"
 
   if [[ "$FOLDER_NAME" == "8_8" ]]; then
     SOLVER_PATH="-8.8"
@@ -56,10 +63,10 @@ for KEY in "${!VERSION_MAP[@]}"; do
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
-    sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe/g" "${DIST_DIR}/config.yaml"
+    sed -i "s/VER: ANTARES_SOLVER_PATH/$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver.exe/g" "${DIST_DIR}/config.yaml"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
-    sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver/g" "${DIST_DIR}/config.yaml"
+    sed -i "s/VER: ANTARES_SOLVER_PATH/$YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/antares$SOLVER_PATH-solver/g" "${DIST_DIR}/config.yaml"
   fi
   rm $ANTARES_SOLVER_ZIPFILE_NAME
   cd ..
