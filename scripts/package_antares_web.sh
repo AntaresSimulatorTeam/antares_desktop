@@ -55,12 +55,4 @@ else
   sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver/g" "${DIST_DIR}/config.yaml"
 fi
 
-echo "INFO: Creating shortcuts..."
-if [[ "$OSTYPE" == "msys"* ]]; then
-  cp "${RESOURCES_DIR}/AntaresWebServerShortcut.lnk" "${DIST_DIR}"
-else
-  echo "INFO: Updating executable permissions..."
-  chmod +x "${DIST_DIR}/AntaresWeb/AntaresWebServer"
-fi
-
 echo "INFO: Antares Web Packaging DONE."
