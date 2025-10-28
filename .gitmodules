@@ -1,6 +1,4 @@
-[submodule "antares Web"]
-	path = antares_web
-	url = https://github.com/AntaresSimulatorTeam/AntaREST.git
 [submodule "antares_web"]
 	path = antares_web
 	url = https://github.com/AntaresSimulatorTeam/AntaREST.git
+	branch = dev

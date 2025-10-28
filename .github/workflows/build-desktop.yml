@@ -12,7 +12,7 @@ jobs:
         os: [ubuntu-22.04]
 
     steps:
-      - name: 🐙 Checkout GitHub repo (go back on antares_desktop)
+      - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
