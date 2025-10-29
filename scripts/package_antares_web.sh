@@ -57,7 +57,7 @@ declare -A YAML_VERSION_MAP=(
   ["9.3.1"]="930"
 )
 
-SOLVER_MAPPING_IN_CONFIG_FILE="\\n"
+SOLVER_MAPPING_IN_CONFIG_FILE=""
 
 for KEY in "${!VERSION_MAP[@]}"; do
   LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
@@ -87,7 +87,7 @@ for KEY in "${!VERSION_MAP[@]}"; do
 done
 
 echo "Writing solver mapping inside the application config file"
-sed -i "/VER: ANTARES_SOLVER_PATH/c$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
+sed -i "/VER: ANTARES_SOLVER_PATH/c\\$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
 
 echo "INFO: Creating shortcuts..."
 if [[ "$OSTYPE" == "msys"* ]]; then
