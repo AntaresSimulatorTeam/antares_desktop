@@ -2,7 +2,11 @@ name: build-desktop
 on:
   push:
     branches:
-      - "**"
+      - "build/**"
+      - "cron-job"
+  schedule:
+    - cron: '14 3 * * *'
+
 jobs:
   binary:
     runs-on: ${{ matrix.os }}
@@ -83,3 +87,14 @@ jobs:
         with:
           name: AntaresWeb-${{ matrix.os }}-pkg
           path: dist/package/AntaresWeb.zip
+
+      - name: 📦 Create or update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: AntaresWebDev
+          tag_name: AntaresWebDev
+          files: dist/package/AntaresWeb.zip
+          generate_release_notes: true
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
