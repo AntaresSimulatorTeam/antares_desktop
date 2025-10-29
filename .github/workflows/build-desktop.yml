@@ -9,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [ubuntu-22.04, windows-latest]
+        os: [ubuntu-22.04]
 
     steps:
       - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)

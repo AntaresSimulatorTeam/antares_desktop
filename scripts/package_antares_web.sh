@@ -8,10 +8,6 @@
 
 set -e
 
-ANTARES_SOLVER_VERSION="8.8"
-ANTARES_SOLVER_FULL_VERSION="8.8.17"
-ANTARES_SOLVER_VERSION_INT="880"
-
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 PROJECT_DIR=$(dirname -- "${SCRIPT_DIR}")
 DIST_DIR="${PROJECT_DIR}/dist/package"
@@ -24,8 +20,6 @@ if [[ "$OSTYPE" == "msys"* ]]; then
 else
   ANTARES_SOLVER_ZIPFILE_NAME="antares-solver_ubuntu22.04.tar.gz"
 fi
-
-LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$ANTARES_SOLVER_FULL_VERSION/$ANTARES_SOLVER_ZIPFILE_NAME"
 
 echo "INFO: Preparing the Git Commit ID..."
 git log -1 HEAD --format=%H > ${RESOURCES_DIR}/commit_id
@@ -48,37 +42,52 @@ fi
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
 
-if [ -f "$ANTARES_SOLVER_ZIPFILE_NAME" ]; then
-  echo "INFO: Using existing '$ANTARES_SOLVER_ZIPFILE_NAME' in '$ANTARES_SOLVER_DIR'..."
-else
-  echo "INFO: Downloading '$ANTARES_SOLVER_ZIPFILE_NAME' in '$ANTARES_SOLVER_DIR'..."
-  cd "$ANTARES_SOLVER_DIR" || exit
-  wget $LINK
-fi
-
-echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
-if [[ "$OSTYPE" == "msys"* ]]; then
-  7z x $ANTARES_SOLVER_ZIPFILE_NAME
-else
-  tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
-fi
-rm $ANTARES_SOLVER_ZIPFILE_NAME
-
-if [[ "$OSTYPE" == "msys"* ]]; then
-  echo "INFO: Moving executables in '$ANTARES_SOLVER_DIR'..."
-  mv "$ANTARES_SOLVER_DIR/solver/Release/"* "$ANTARES_SOLVER_DIR"
-  rm -rf $ANTARES_SOLVER_FOLDER_NAME
-  rm -rf $"$ANTARES_SOLVER_DIR/solver/Release/"
-fi
-
 echo "INFO: Copying basic configuration files..."
-rm -rf "${DIST_DIR}/examples" # in case of replay
 cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
-if [[ "$OSTYPE" == "msys"* ]]; then
-  sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver.exe/g" "${DIST_DIR}/config.yaml"
-else
-  sed -i "s/VER: ANTARES_SOLVER_PATH/$ANTARES_SOLVER_VERSION_INT: .\/AntaresWeb\/antares_solver\/antares-$ANTARES_SOLVER_VERSION-solver/g" "${DIST_DIR}/config.yaml"
-fi
+
+declare -A VERSION_MAP=(
+    ["8.8.17"]="8_8"
+    ["9.2.2"]="9_2"
+    ["9.3.1"]="9_3"
+)
+
+declare -A YAML_VERSION_MAP=(
+  ["8.8.17"]="880"
+  ["9.2.2"]="920"
+  ["9.3.1"]="930"
+)
+
+SOLVER_MAPPING_IN_CONFIG_FILE=""
+
+for KEY in "${!VERSION_MAP[@]}"; do
+  LINK="https://github.com/AntaresSimulatorTeam/Antares_Simulator/releases/download/v$KEY/$ANTARES_SOLVER_ZIPFILE_NAME"
+  FOLDER_NAME="${VERSION_MAP[$KEY]}"
+  YAML_SOLVER_NAME="${YAML_VERSION_MAP[$KEY]}"
+
+  if [[ "$FOLDER_NAME" == "8_8" ]]; then
+    SOLVER_PATH="-8.8"
+  else
+    SOLVER_PATH=""
+  fi
+
+  mkdir -p "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}"
+  cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
+  wget "$LINK"
+  echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
+  if [[ "$OSTYPE" == "msys"* ]]; then
+    7z x $ANTARES_SOLVER_ZIPFILE_NAME
+    SOLVER_NAME="antares$SOLVER_PATH-solver.exe"
+  else
+    tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
+    SOLVER_NAME="antares$SOLVER_PATH-solver"
+  fi
+  SOLVER_MAPPING_IN_CONFIG_FILE+="        $YAML_SOLVER_NAME: .\/AntaresWeb\/antares_solver\/$FOLDER_NAME\/$SOLVER_NAME\n"
+  rm $ANTARES_SOLVER_ZIPFILE_NAME
+  cd ..
+done
+
+echo "Writing solver mapping inside the application config file"
+sed -i "/VER: ANTARES_SOLVER_PATH/c\\$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
 
 echo "INFO: Creating shortcuts..."
 if [[ "$OSTYPE" == "msys"* ]]; then
