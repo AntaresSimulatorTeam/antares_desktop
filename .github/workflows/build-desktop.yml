@@ -4,6 +4,7 @@ on:
     branches:
       - "build/**"
       - "cron-job"
+
   schedule:
     - cron: '14 3 * * *'
 
