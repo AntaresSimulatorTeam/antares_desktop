@@ -2,6 +2,9 @@ name: build-desktop
 on:
   schedule:
     - cron: '14 3 * * *'
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
@@ -94,3 +97,8 @@ jobs:
           overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📦 Delete artifact to save storage space
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: AntaresWeb-${{ matrix.os }}-pkg
