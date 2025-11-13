@@ -76,10 +76,11 @@ for KEY in "${!VERSION_MAP[@]}"; do
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
-    if [ -d "$ANTARES_SOLVER_DIR/solver/Release" ]; then
-      echo "INFO: Moving executables in '$ANTARES_SOLVER_DIR'..."
-      mv "$ANTARES_SOLVER_DIR/solver/Release/"* "$ANTARES_SOLVER_DIR"
-      rm -rf $"$ANTARES_SOLVER_DIR/solver/Release/"
+    ls
+    if [ -d "solver/Release" ]; then
+      echo "INFO: Moving executables ..."
+      mv solver/Release/* .
+      rm -rf solver/Release
     fi
     SOLVER_NAME="antares$SOLVER_PATH-solver.exe"
   else
