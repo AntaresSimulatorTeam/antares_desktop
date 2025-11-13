@@ -2,6 +2,9 @@ name: build-desktop
 on:
   schedule:
     - cron: '14 3 * * *'
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
