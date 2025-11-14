@@ -64,15 +64,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: AntaresWeb-${{ matrix.os }}-pkg
-          path: dist/package/AntaresWeb.zip
+          path: dist/package
 
       - name: 📦 Create or update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          files: dist/package/AntaresWeb.zip
-          generate_release_notes: false
-          overwrite_files: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create ${{ github.ref_name }} AntaresWeb-${{ matrix.os }}-pkg
+
