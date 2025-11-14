@@ -60,13 +60,18 @@ jobs:
         run: |
           cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
 
-      - name: 🚀 Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: AntaresWeb-${{ matrix.os }}-pkg
-          path: dist/package
+      - name: 📦 Archive Antares Desktop for Windows
+        if: matrix.os == 'windows-latest'
+        run: 7z a AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
+        working-directory: dist/package
+
+      - name: 📦 Archive Antares Desktop for Ubuntu
+        # this is the only way to preserve file permission and symlinks
+        if: matrix.os != 'windows-latest'
+        run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
+        working-directory: dist/package
 
       - name: 📦 Create or update Release
-        run: gh release create ${{ github.ref_name }} AntaresWeb-${{ matrix.os }}-pkg
+        run: gh release create ${{ github.ref_name }} AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
