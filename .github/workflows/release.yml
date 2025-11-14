@@ -1,7 +1,7 @@
-name: build-desktop
+name: release
 on:
-  schedule:
-    - cron: '14 3 * * *'
+  release:
+    types: [published]
 
 jobs:
   binary:
@@ -17,14 +17,6 @@ jobs:
         with:
           fetch-depth: 0
           submodules: true
-
-      - name: Update submodule to latest commit of `dev`
-        run: |
-          cd antares_web
-          git checkout dev
-          git pull
-          echo "Current commit: $(git log -1 --pretty=oneline)"
-          cd ..
 
       - name: 🔗 Install wget for Windows
         if: matrix.os == 'windows-latest'
@@ -69,28 +61,16 @@ jobs:
 
       - name: 📦 Archive Antares Desktop for Windows
         if: matrix.os == 'windows-latest'
-        run: 7z a AntaresWeb.zip *
+        run: 7z a AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
         working-directory: dist/package
 
       - name: 📦 Archive Antares Desktop for Ubuntu
         # this is the only way to preserve file permission and symlinks
         if: matrix.os != 'windows-latest'
-        run: zip -r --symlinks AntaresWeb.zip *
+        run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
         working-directory: dist/package
 
-      - name: 🚀 Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: AntaresWeb-${{ matrix.os }}-pkg
-          path: dist/package/AntaresWeb.zip
-
-      - name: 📦 Create or update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: AntaresWebDev
-          tag_name: AntaresWebDev
-          files: dist/package/AntaresWeb.zip
-          generate_release_notes: false
-          overwrite_files: true
+      - name: 📦 Upload asset to release
+        run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
