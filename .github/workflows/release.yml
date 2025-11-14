@@ -1,0 +1,78 @@
+name: release
+on:
+  push:
+    tags:
+     - 'v*'
+
+jobs:
+  binary:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 3
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+
+    steps:
+      - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: 🔗 Install wget for Windows
+        if: matrix.os == 'windows-latest'
+        run: choco install wget --no-progress
+
+      - name: 💚 Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: 💚 Install dependencies
+        run: npm install
+        working-directory: antares_web/webapp
+
+      - name: 💚 Build webapp
+        run: bash ./build-front.sh
+        working-directory: scripts
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: 🐍 Install development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r antares_web/requirements-dev.txt
+
+      - name: 🐍 Install Windows dependencies
+        if: matrix.os == 'windows-latest'
+        run: pip install -r antares_web/requirements-windows.txt
+
+      - name: 📦 Packaging
+        run: bash ./package_antares_web.sh
+        working-directory: scripts
+
+      - name: 📜️ Copy changelog file
+        run: |
+          cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
+
+      - name: 🚀 Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: AntaresWeb-${{ matrix.os }}-pkg
+          path: dist/package/AntaresWeb.zip
+
+      - name: 📦 Create or update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: dist/package/AntaresWeb.zip
+          generate_release_notes: false
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
