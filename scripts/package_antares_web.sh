@@ -76,6 +76,12 @@ for KEY in "${!VERSION_MAP[@]}"; do
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
+    # In some releases, the binaries were stored inside that subdir, instead of the root
+    if [ -d "solver/Release" ]; then
+      echo "INFO: Moving executables ..."
+      mv solver/Release/* .
+      rm -rf solver
+    fi
     SOLVER_NAME="antares$SOLVER_PATH-solver.exe"
   else
     tar xzf $ANTARES_SOLVER_ZIPFILE_NAME
