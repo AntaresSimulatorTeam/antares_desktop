@@ -2,6 +2,9 @@ name: nightly
 on:
   schedule:
     - cron: '14 3 * * *'
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
@@ -78,19 +81,7 @@ jobs:
         run: zip -r --symlinks AntaresWeb.zip *
         working-directory: dist/package
 
-      - name: 🚀 Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: AntaresWeb-${{ matrix.os }}-pkg
-          path: dist/package/AntaresWeb.zip
-
-      - name: 📦 Create or update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: AntaresWebDev
-          tag_name: AntaresWebDev
-          files: dist/package/AntaresWeb.zip
-          generate_release_notes: false
-          overwrite_files: true
+      - name: 📦 Upload asset to release
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
