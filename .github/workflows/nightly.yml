@@ -26,10 +26,6 @@ jobs:
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
 
-      - name: 🔗 Install wget for Windows
-        if: matrix.os == 'windows-latest'
-        run: choco install wget --no-progress
-
       - name: 💚 Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -55,10 +51,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r antares_web/requirements-dev.txt
 
-      - name: 🐍 Install Windows dependencies
-        if: matrix.os == 'windows-latest'
-        run: pip install -r antares_web/requirements-windows.txt
-
       - name: 📦 Packaging
         run: bash ./package_antares_web.sh
         working-directory: scripts
@@ -67,30 +59,13 @@ jobs:
         run: |
           cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
 
-      - name: 📦 Archive Antares Desktop for Windows
-        if: matrix.os == 'windows-latest'
-        run: 7z a AntaresWeb.zip *
-        working-directory: dist/package
-
       - name: 📦 Archive Antares Desktop for Ubuntu
         # this is the only way to preserve file permission and symlinks
         if: matrix.os != 'windows-latest'
         run: zip -r --symlinks AntaresWeb.zip *
         working-directory: dist/package
 
-      - name: 🚀 Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: AntaresWeb-${{ matrix.os }}-pkg
-          path: dist/package/AntaresWeb.zip
-
-      - name: 📦 Create or update Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: AntaresWebDev
-          tag_name: AntaresWebDev
-          files: dist/package/AntaresWeb.zip
-          generate_release_notes: false
-          overwrite_files: true
+      - name: 📦 Upload asset to release
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb.zip  --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
