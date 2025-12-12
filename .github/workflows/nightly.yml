@@ -82,6 +82,6 @@ jobs:
         working-directory: dist/package
 
       - name: 📦 Upload asset to release
-        run: gh release upload AntaresWebDev dist/package/AntaresWeb.zip
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb.zip  --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
