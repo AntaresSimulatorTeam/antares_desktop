@@ -1,8 +1,7 @@
 name: nightly
 on:
-  push:
-    branches:
-      - "fix/useless-windows-pop"
+  schedule:
+    - cron: '14 3 * * *'
 
 jobs:
   binary:
@@ -10,7 +9,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-22.04]
 
     steps:
       - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
@@ -19,17 +18,13 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: Update submodule to latest commit of `fix/local-launcher-pop-window-on-desktop`
+      - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          git checkout fix/local-launcher-pop-window-on-desktop
+          git checkout dev
           git pull
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
-
-      - name: 🔗 Install wget for Windows
-        if: matrix.os == 'windows-latest'
-        run: choco install wget --no-progress
 
       - name: 💚 Set up Node.js
         uses: actions/setup-node@v4
