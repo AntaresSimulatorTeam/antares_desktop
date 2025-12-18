@@ -22,7 +22,7 @@ jobs:
       - name: Update submodule to latest commit of `master`
         run: |
           cd antares_web
-          git checkout master
+          git checkout fix-useless-windows-pop
           git pull
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
