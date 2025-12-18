@@ -27,6 +27,10 @@ jobs:
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
 
+      - name: 🔗 Install wget for Windows
+        if: matrix.os == 'windows-latest'
+        run: choco install wget --no-progress
+
       - name: 💚 Set up Node.js
         uses: actions/setup-node@v4
         with:
