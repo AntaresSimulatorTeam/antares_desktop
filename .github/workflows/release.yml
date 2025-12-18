@@ -84,6 +84,6 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 📦 Upload asset to release
-        run: gh release upload AntaresWebDev dist/package/AntaresWeb-${{ github.ref_name }}-${{ matrix.os }}-.zip  --clobber
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip  --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
