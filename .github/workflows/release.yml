@@ -79,7 +79,11 @@ jobs:
         run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
         working-directory: dist/package
 
+      # - name: 📦 Upload asset to release
+      #   run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 📦 Upload asset to release
-        run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb-${{ github.ref_name }}-${{ matrix.os }}-.zip  --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
