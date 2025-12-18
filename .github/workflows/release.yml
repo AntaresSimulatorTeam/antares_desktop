@@ -2,7 +2,7 @@ name: release
 on:
   push:
     branches:
-      - "fix/useless-windows-pop"
+      - "fix-useless-windows-pop"
 
 jobs:
   binary:
