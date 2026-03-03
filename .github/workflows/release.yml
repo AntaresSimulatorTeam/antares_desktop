@@ -49,9 +49,6 @@ jobs:
           uv sync --all-extras
           cd ..
 
-      - name: 🐍 Install pyinstaller on the whole system to use it in the shell script
-        run: uv pip install --system pyinstaller
-
       - name: 🐍 Install Windows dependencies
         if: matrix.os == 'windows-latest'
         run: pip install -r antares_web/requirements-windows.txt

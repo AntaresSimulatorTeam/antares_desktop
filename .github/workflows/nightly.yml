@@ -56,9 +56,6 @@ jobs:
           uv sync --all-extras
           cd ..
 
-      - name: 🐍 Install pyinstaller on the whole system to use it in the shell script
-        run: uv pip install --system pyinstaller
-
       - name: 📦 Packaging
         run: bash ./package_antares_web.sh
         working-directory: scripts
