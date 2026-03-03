@@ -31,10 +31,12 @@ rm -rf ${DIST_DIR}
 echo "INFO: Generating the Desktop version of the Web Application..."
 if [[ "$OSTYPE" == "msys"* ]]; then
   pushd ${PROJECT_DIR}
+  antares_web\.venv\Scripts\activate  # Enter the virtual env to use pyinstaller
   pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
   popd
 else
   pushd ${PROJECT_DIR}
+  source antares_web/.venv/bin/activate  # Enter the virtual env to use pyinstaller
   pyinstaller --distpath ${DIST_DIR} AntaresWebLinux.spec
   popd
 fi
