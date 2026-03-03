@@ -31,11 +31,11 @@ rm -rf ${DIST_DIR}
 echo "INFO: Generating the Desktop version of the Web Application..."
 if [[ "$OSTYPE" == "msys"* ]]; then
   pushd ${PROJECT_DIR}
-  pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
+  uv run pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
   popd
 else
   pushd ${PROJECT_DIR}
-  pyinstaller --distpath ${DIST_DIR} AntaresWebLinux.spec
+  uv run pyinstaller --distpath ${DIST_DIR} AntaresWebLinux.spec
   popd
 fi
 
