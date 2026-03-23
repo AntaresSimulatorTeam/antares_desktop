@@ -72,6 +72,6 @@ jobs:
         working-directory: dist/package
 
       - name: 📦 Upload asset to release
-        run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-v2.30.0.zip
+        run: gh release upload v2.30.0 dist/package/AntaresWeb-${{ matrix.os }}-v2.30.0.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
