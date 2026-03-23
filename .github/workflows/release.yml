@@ -2,6 +2,9 @@ name: release
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
@@ -67,8 +70,3 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
         working-directory: dist/package
-
-      - name: 📦 Upload asset to release
-        run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
