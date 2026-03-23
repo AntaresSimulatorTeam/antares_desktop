@@ -9,12 +9,12 @@ block_cipher = None
 # dedicated analyse for this.
 versions_dir = Path('alembic/versions')
 versions_files = [str(f) for f in versions_dir.iterdir() if f.is_file() and f.suffix == '.py']
-alembic_analysis = Analysis(["/alembic/env.py"] + versions_files)
+alembic_analysis = Analysis(["antares_web/alembic/env.py"] + versions_files)
 
-antares_web_server_a = Analysis(['antarest/gui.py'],
+antares_web_server_a = Analysis(['antares_web/antarest/gui.py'],
              pathex=[],
              binaries=[],
-             datas=[('./resources', './resources'), ('./alembic', './alembic'), ('./alembic.ini', './')],
+             datas=[('./resources', './resources'), ('.antares_web/alembic', './alembic'), ('.antares_web/alembic.ini', './')],
              hiddenimports=[
                  'cmath',
                  'antarest.dbmodel',
