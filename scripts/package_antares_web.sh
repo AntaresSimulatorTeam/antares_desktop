@@ -32,7 +32,8 @@ echo "INFO: Generating the Desktop version of the Web Application..."
 
 pushd ${PROJECT_DIR}
 if [[ "$OSTYPE" == "msys"* ]]; then
-  uv run which pyinstaller --distpath ${DIST_DIR} ../AntaresWebWin.spec
+  uv run which pyinstaller
+  uv run pyinstaller --distpath ${DIST_DIR} ../AntaresWebWin.spec
 else
   uv run pyinstaller --distpath ${DIST_DIR} ../AntaresWebLinux.spec
 fi
