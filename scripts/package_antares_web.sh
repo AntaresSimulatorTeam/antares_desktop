@@ -34,12 +34,13 @@ pushd ${PROJECT_DIR}
 cd antares_web
 
 if [[ "$OSTYPE" == "msys"* ]]; then
-  pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
+  pyinstaller --distpath ${DIST_DIR} ../AntaresWebWin.spec
 else
-  pyinstaller --distpath ${DIST_DIR} AntaresWebLinux.spec
+  pyinstaller --distpath ${DIST_DIR} ../AntaresWebLinux.spec
 fi
 
 popd
+cd ..
 
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
