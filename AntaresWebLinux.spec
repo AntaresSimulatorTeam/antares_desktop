@@ -7,14 +7,14 @@ block_cipher = None
 # alembic loads version files by their path, so we need to add them as "data" to the package,
 # but all the dependencies they use need to be included also, wo we need to perform a
 # dedicated analyse for this.
-versions_dir = Path('alembic/versions')
+versions_dir = Path('antares_web/alembic/versions')
 versions_files = [str(f) for f in versions_dir.iterdir() if f.is_file() and f.suffix == '.py']
 alembic_analysis = Analysis(["antares_web/alembic/env.py"] + versions_files)
 
 antares_web_server_a = Analysis(['antares_web/antarest/gui.py'],
              pathex=[],
              binaries=[],
-             datas=[('./resources', './resources'), ('.antares_web/alembic', './alembic'), ('.antares_web/alembic.ini', './')],
+             datas=[('./resources', './resources'), ('./antares_web/alembic', './alembic'), ('./antares_web/alembic.ini', './')],
              hiddenimports=[
                  'cmath',
                  'antarest.dbmodel',

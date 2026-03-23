@@ -31,14 +31,12 @@ rm -rf ${DIST_DIR}
 echo "INFO: Generating the Desktop version of the Web Application..."
 
 pushd ${PROJECT_DIR}
-cd antares_web
 if [[ "$OSTYPE" == "msys"* ]]; then
-  uv run pyinstaller --distpath ${DIST_DIR} ../AntaresWebWin.spec
+  uv run which pyinstaller --distpath ${DIST_DIR} ../AntaresWebWin.spec
 else
   uv run pyinstaller --distpath ${DIST_DIR} ../AntaresWebLinux.spec
 fi
 popd
-cd ..
 
 echo "INFO: Creating destination directory '${ANTARES_SOLVER_DIR}'..."
 mkdir -p "${ANTARES_SOLVER_DIR}"
