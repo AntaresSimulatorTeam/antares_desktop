@@ -14,7 +14,7 @@ DIST_DIR="${PROJECT_DIR}/dist/package"
 RESOURCES_DIR="${PROJECT_DIR}/resources"
 ANTARES_SOLVER_DIR="${DIST_DIR}/AntaresWeb/antares_solver"
 
-if [[ "$OSTYPE" == "msys"* ]]; then
+if [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
   ANTARES_SOLVER_FOLDER_NAME="antares-solver_windows"
   ANTARES_SOLVER_ZIPFILE_NAME="$ANTARES_SOLVER_FOLDER_NAME.zip"
 else
@@ -31,7 +31,7 @@ rm -rf ${DIST_DIR}
 echo "INFO: Generating the Desktop version of the Web Application..."
 
 pushd ${PROJECT_DIR}
-if [[ "$OSTYPE" == "msys"* ]]; then
+if [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
   source antares_web/.venv/Scripts/activate  # Enter the virtual env to use pyinstaller
   pyinstaller --distpath ${DIST_DIR} AntaresWebWin.spec
 else
@@ -75,7 +75,7 @@ for KEY in "${!VERSION_MAP[@]}"; do
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
   wget "$LINK"
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
-  if [[ "$OSTYPE" == "msys"* ]]; then
+  if [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
     # In some releases, the binaries were stored inside that subdir, instead of the root
     if [ -d "solver/Release" ]; then
@@ -97,7 +97,7 @@ echo "Writing solver mapping inside the application config file"
 sed -i "/VER: ANTARES_SOLVER_PATH/c\\$SOLVER_MAPPING_IN_CONFIG_FILE" "${DIST_DIR}/config.yaml"
 
 echo "INFO: Creating shortcuts..."
-if [[ "$OSTYPE" == "msys"* ]]; then
+if [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
   cp "${RESOURCES_DIR}/AntaresWebServerShortcut.lnk" "${DIST_DIR}"
 else
   echo "INFO: Updating executable permissions..."
