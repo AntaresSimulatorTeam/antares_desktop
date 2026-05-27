@@ -1,7 +1,8 @@
 name: release
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
@@ -18,25 +19,6 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      - name: 🔗 Install wget for Windows
-        if: matrix.os == 'windows-latest'
-        run: choco install wget --no-progress
-
-      - name: 💚 Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.13.0
-
-      - name: 💚 Install dependencies
-        run: npm install
-        working-directory: antares_web/webapp
-
-      - name: 💚 Build webapp
-        run: bash ./build-front.sh
-        working-directory: scripts
-        env:
-          NODE_OPTIONS: --max-old-space-size=8192
-
       - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
@@ -52,23 +34,3 @@ jobs:
       - name: 📦 Packaging
         run: bash ./package_antares_web.sh
         working-directory: scripts
-
-      - name: 📜️ Copy changelog file
-        run: |
-          cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
-
-      - name: 📦 Archive Antares Desktop for Windows
-        if: matrix.os == 'windows-latest'
-        run: 7z a AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
-        working-directory: dist/package
-
-      - name: 📦 Archive Antares Desktop for Ubuntu
-        # this is the only way to preserve file permission and symlinks
-        if: matrix.os != 'windows-latest'
-        run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
-        working-directory: dist/package
-
-      - name: 📦 Upload asset to release
-        run: gh release upload ${{ github.ref_name }} dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
