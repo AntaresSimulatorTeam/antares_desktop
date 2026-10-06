@@ -1,7 +1,8 @@
 name: nightly
 on:
-  schedule:
-    - cron: '14 3 * * *'
+  push:
+    branches:
+      - "**"
 
 jobs:
   binary:
@@ -9,7 +10,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, windows-latest]
 
     steps:
       - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
@@ -21,7 +22,7 @@ jobs:
       - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          git checkout dev
+          git checkout fix/desktop-issue
           git pull
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
@@ -61,13 +62,13 @@ jobs:
         run: |
           cp antares_web/docs/CHANGELOG.md dist/package/CHANGELOG.md
 
+      - name: 📦 Archive Antares Desktop for Windows
+        if: matrix.os == 'windows-latest'
+        run: 7z a AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
+        working-directory: dist/package
+
       - name: 📦 Archive Antares Desktop for Ubuntu
         # this is the only way to preserve file permission and symlinks
         if: matrix.os != 'windows-latest'
         run: zip -r --symlinks AntaresWeb.zip *
         working-directory: dist/package
-
-      - name: 📦 Upload asset to release
-        run: gh release upload AntaresWebDev dist/package/AntaresWeb.zip  --clobber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
