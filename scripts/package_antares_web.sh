@@ -71,7 +71,6 @@ for KEY in "${!VERSION_MAP[@]}"; do
     SOLVER_PATH=""
   fi
 
-
   mkdir -p "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}"
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
   wget "$LINK"

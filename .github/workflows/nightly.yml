@@ -10,7 +10,7 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-22.04, windows-latest]
 
     steps:
       - name: 🐙 Checkout GitHub repo (Also build submodule AntaREST)
@@ -22,10 +22,15 @@ jobs:
       - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          git checkout master
+          git checkout fix/desktop-issue
           git pull
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
+
+      - name: 🔗 Install wget for Windows
+        if: matrix.os == 'windows-latest'
+        run: choco install wget --no-progress
+
 
       - name: 💚 Set up Node.js
         uses: actions/setup-node@v4
