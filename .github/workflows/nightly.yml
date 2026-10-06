@@ -69,16 +69,16 @@ jobs:
 
       - name: 📦 Archive Antares Desktop for Windows
         if: matrix.os == 'windows-latest'
-        run: 7z a AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
+        run: 7z a AntaresWeb-${{ matrix.os }}.zip *
         working-directory: dist/package
 
       - name: 📦 Archive Antares Desktop for Ubuntu
         # this is the only way to preserve file permission and symlinks
         if: matrix.os != 'windows-latest'
-        run: zip -r --symlinks AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip *
+        run: zip -r --symlinks AntaresWeb-${{ matrix.os }}.zip *
         working-directory: dist/package
 
       - name: 📦 Upload asset to release
-        run: gh release upload AntaresWebDev dist/package/AntaresWeb-${{ matrix.os }}-${{ github.ref_name }}.zip
+        run: gh release upload AntaresWebDev dist/package/AntaresWeb-${{ matrix.os }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
