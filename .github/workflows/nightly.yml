@@ -22,7 +22,7 @@ jobs:
       - name: Update submodule to latest commit of `dev`
         run: |
           cd antares_web
-          git checkout dev
+          git checkout master
           git pull
           echo "Current commit: $(git log -1 --pretty=oneline)"
           cd ..
