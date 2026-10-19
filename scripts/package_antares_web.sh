@@ -73,7 +73,7 @@ for KEY in "${!VERSION_MAP[@]}"; do
 
   mkdir -p "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}"
   cd "${ANTARES_SOLVER_DIR}/${VERSION_MAP[$KEY]}" || exit
-  wget "$LINK"
+  curl -LO "$LINK"
   echo "INFO: Uncompressing '$ANTARES_SOLVER_ZIPFILE_NAME'..."
   if [[ "$OSTYPE" == "msys"* || "$OSTYPE" == "cygwin"* ]]; then
     7z x $ANTARES_SOLVER_ZIPFILE_NAME
