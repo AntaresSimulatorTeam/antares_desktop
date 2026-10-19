@@ -49,13 +49,15 @@ cp -r "${RESOURCES_DIR}"/antares-desktop-fs/* "${DIST_DIR}"
 declare -A VERSION_MAP=(
     ["8.8.19"]="8_8"
     ["9.2.3"]="9_2"
-    ["9.3.2"]="9_3"
+    ["9.3.12"]="9_3"
+    ["10.2.0"]="10_2"
 )
 
 declare -A YAML_VERSION_MAP=(
   ["8.8.19"]="880"
   ["9.2.3"]="920"
-  ["9.3.2"]="930"
+  ["9.3.12"]="930"
+  ["10.2.0"]="10.2"
 )
 
 SOLVER_MAPPING_IN_CONFIG_FILE=""
